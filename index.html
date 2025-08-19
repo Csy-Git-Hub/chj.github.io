@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扫码验证</title>
+    <style>
+        * {
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f4f4f4;
+			color: #333;
+			font-size: 12px;
+			line-height: 1.6;
+		}
+
+		/* 顶部导航栏 */
+		.top-nav {
+			position: relative;
+			height: 44px;
+			background-color: white;
+			box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 15px;
+			z-index: 100;
+		}
+
+		.top-nav .back-btn {
+			font-size: 24px;
+			color: #333;
+			cursor: pointer;
+		}
+
+		.top-nav .title {
+			font-size: 16px;
+			font-weight: 500;
+			color: #333;
+			text-align: center;
+		}
+
+		.top-nav .more-btn {
+			font-size: 20px;
+			color: #333;
+			cursor: pointer;
+		}
+
+		/* Logo + 标题区域 */
+		.header {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			padding: 15px 15px 10px;
+			background-color: white;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.logo {
+			width: 45px;
+			height: 45px;
+			background-image: url('logo.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			border-radius: 50%;
+		}
+
+		.title-text {
+			font-size: 18px;
+			color: #333;
+			margin: 0;
+			font-weight: 500;
+		}
+
+		/* 横幅图 */
+		.banner {
+            width: 100%;
+            height: 50px;
+            background-image: url('hengtiao.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+		/* 内容容器 */
+		.content {
+			padding: 15px;
+			background-color: white;
+			margin: 15px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+		
+		.result-title {
+            background-color: #3c4b82;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+		/* 表格样式 */
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 0;
+		}
+
+		 th, td {
+            border: 1px solid #ddd;
+            padding: 10px 8px;
+            text-align: left;
+            word-wrap: break-word;
+            font-weight: normal;
+        }
+        
+        th {
+            width: 20%;
+        }
+        
+        td {
+            width: 70%;
+        }
+
+		/* 数据核实图片 */
+		.verification-image {
+            width: 128px;
+            height: auto;
+            display: block;
+            margin: 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .verification-image:hover {
+            transform: scale(1.05);
+        }
+
+		/* 查询结果提示 */
+		.query-result {
+			color: green;
+			font-weight: bold;
+			margin: 15px 0;
+			text-align: left;
+		}
+
+		/* 联系电话 */
+		.contact-info {
+			text-align: center;
+			margin: 15px 0;
+			font-size: 14px;
+			color: #666;
+		}
+
+		/* 技术支持 */
+		.footer {
+			text-align: center;
+			margin-top: 15px;
+			color: #666;
+			font-size: 12px;
+		}
+
+		/* 模态框 */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1000;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.8);
+			overflow: auto;
+		}
+
+		.modal-content {
+			display: block;
+			margin: 5% auto;
+			max-width: 90%;
+			max-height: 90%;
+			cursor: pointer;
+		}
+
+		.close {
+			position: absolute;
+			top: 15px;
+			right: 35px;
+			color: #fff;
+			font-size: 40px;
+			font-weight: bold;
+			cursor: pointer;
+			z-index: 1001;
+		}
+
+		.close:hover {
+			color: #ccc;
+		}
+
+		.modal-caption {
+			display: block;
+			margin: 0 auto;
+			text-align: center;
+			color: #ccc;
+			padding: 10px 0;
+			font-size: 16px;
+		}
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-nav">
+        <div class="back-btn" onclick="window.history.back()">く</div>
+        <div class="title">扫码验证</div>
+        <div class="more-btn">&nbsp;</div>
+    </div>
+
+    <!-- Logo + 标题 -->
+    <div class="header">
+        <div class="logo"></div>
+        <h1 class="title-text">校级防伪验证中心</h1>
+    </div>
+
+    <!-- 横幅图 -->
+    <div class="banner"></div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <table>
+            <colgroup>
+                <col style="width: 30%;">
+                <col style="width: 70%;">
+            </colgroup>
+			<tr>
+                <td colspan="2" class="result-title">&nbsp;&nbsp;&nbsp;&nbsp;查询结果</td>
+            </tr>
+            <tr>
+                <th style="text-align:center;">文件编号</th>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;,202510019587</td>
+            </tr>
+            <tr>
+                <th style="text-align:center">文件名称</th>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;在编在岗证明</td>
+            </tr>
+            <tr>
+                <th style="text-align:center">打印日期</th>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;2025-06-16 10:08:01</td>
+            </tr>
+            <tr>
+                <th style="text-align:center">学生姓名</th>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;杨海霞</td>
+            </tr>
+            <tr>
+                <th style="text-align:center">学工号</th>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;T06418</td>
+            </tr>
+            <tr>
+                <th style="text-align:center">数据核实</th>
+                <td><img src="yz.png" alt="数据核实" class="verification-image" id="verificationImg"></td>
+            </tr>
+            <tr>
+                <th style="text-align:center">查询结果</th>
+                <td class="query-result">● 查询通过，请进一步核对文件内容信息.</td>
+            </tr>
+			<tr>
+                <td colspan="2" style="text-align:center">进一步核实,请拨打电话0591-22865284</td>
+            </tr>
+        </table>
+        <div class="footer">技术支持:信息中心</div>
+    </div>
+
+    <!-- 图片放大模态框 -->
+    <div id="imgModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        const modal = document.getElementById("imgModal");
+        const modalImg = document.getElementById("modalImg");
+        const verificationImg = document.getElementById("verificationImg");
+        const closeBtn = document.getElementsByClassName("close")[0];
+
+        verificationImg.onclick = function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            document.body.style.overflow = "hidden";
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && modal.style.display === "block") {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        });
+    </script>
+</body>
+</html>
